@@ -2,11 +2,12 @@ import css from "./SearchBar.module.css";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FiSearch } from "react-icons/fi";
+import { ISearchBarProps } from "./SearchBar.types";
 
-const SearchBar = ({ searchPhotos }) => {
-  const [value, setValue] = useState("");
+const SearchBar = ({ searchPhotos }: ISearchBarProps) => {
+  const [value, setValue] = useState<string>("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const query = value.trim();
     if (!query.length) {
@@ -17,7 +18,7 @@ const SearchBar = ({ searchPhotos }) => {
     searchPhotos(query);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 

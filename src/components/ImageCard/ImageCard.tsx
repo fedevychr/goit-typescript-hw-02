@@ -1,12 +1,13 @@
 import css from "./ImageCard.module.css";
+import { IImageCardProps } from "./ImageCard.types";
 
-const ImageCard = ({ card, openModal }) => {
+const ImageCard = ({ imgUrl, description, openModal }: IImageCardProps) => {
   return (
     <div className={css.card}>
       <img
         className={css.img}
-        src={card.urls.small}
-        alt={card.alt_description}
+        src={imgUrl}
+        alt={description}
         loading="lazy"
         onClick={openModal}
       />

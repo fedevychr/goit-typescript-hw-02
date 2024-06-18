@@ -2,9 +2,11 @@ import css from "./ImageModal.module.css";
 import { IoIosClose } from "react-icons/io";
 import { modalStyles } from "../../utils/modalStyles";
 import Modal from "react-modal";
+import { IImageModalProps } from "./ImageModal.types";
 
-const ImageModal = ({ photo, isModalOpen, closeModal }) => {
-  Modal.setAppElement(document.getElementById("root"));
+Modal.setAppElement("#root");
+
+const ImageModal = ({ photo, isModalOpen, closeModal }: IImageModalProps) => {
   return (
     <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={modalStyles}>
       {photo && (

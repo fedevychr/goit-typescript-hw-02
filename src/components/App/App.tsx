@@ -5,21 +5,25 @@ import ImageModal from "../ImageModal/ImageModal";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import Loader from "../Loader/Loader";
 import SearchBar from "../SearchBar/SearchBar";
-import css from "../App/App.module.css";
+import css from "./App.module.css";
 
 import { getPhotos } from "../../services/api";
+import { IPhoto, IPhotosResponse } from "./App.types";
+
+type Photos = IPhoto[] | null;
+type Error = string | null;
 
 function App() {
-  const [photos, setPhotos] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [photos, setPhotos] = useState<Photos>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error>(null);
 
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPage] = useState(1);
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPage] = useState<number>(1);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<IPhoto | null>(null);
 
   useEffect(() => {
     if (!query) return;
@@ -29,13 +33,14 @@ function App() {
         setError(null);
         setIsLoading(true);
 
-        const data = await getPhotos(query, page);
+        const { data } = await getPhotos<IPhotosResponse>(query, page);
+
         setTotalPage(data.total_pages);
 
         setPhotos((prevPhotos) =>
           prevPhotos ? [...prevPhotos, ...data.results] : data.results
         );
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setIsLoading(false);
@@ -45,24 +50,24 @@ function App() {
     fetchPhotos();
   }, [query, page]);
 
-  const searchPhotos = (newQuery) => {
+  const searchPhotos = (newQuery: string): void => {
     if (newQuery === query) return;
     setPhotos(null);
     setPage(1);
     setQuery(newQuery);
   };
 
-  const onLoadMore = () => setPage((prevPage) => prevPage + 1);
+  const onLoadMore = (): void => setPage((prevPage) => prevPage + 1);
 
   const isShowBtn = Boolean(photos?.length && !isLoading && page < totalPages);
 
-  const openModal = (photo) => {
+  const openModal = (photo: IPhoto) => {
     setSelectedPhoto(photo);
     setIsModalOpen(true);
     document.body.classList.add("modal-open");
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setIsModalOpen(false);
     document.body.classList.remove("modal-open");
   };
@@ -82,11 +87,13 @@ function App() {
           </div>
         )}
       </div>
-      <ImageModal
-        photo={selectedPhoto}
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-      />
+      {selectedPhoto && (
+        <ImageModal
+          photo={selectedPhoto}
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+        />
+      )}
     </div>
   );
 }
