@@ -1,4 +1,6 @@
-export const modalStyles = {
+import { Styles } from "react-modal";
+
+export const modalStyles: Styles = {
   overlay: {
     position: "fixed",
     top: 0,
