@@ -5,10 +5,10 @@ const Loader = () => {
   return (
     <div className={css.Loader}>
       <InfinitySpin
-        visible={true}
         width="200"
         color="#4fa94d"
         ariaLabel="infinity-spin-loading"
+        visible={true}
       />
     </div>
   );
